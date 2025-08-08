@@ -93,7 +93,12 @@ jobs:
         pylint HYPIR/ --errors-only || true
 
   security-scan:
+    needs: build-and-push
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      security-events: write
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4

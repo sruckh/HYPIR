@@ -1,5 +1,37 @@
 # Engineering Journal
 
+## 2025-08-08 07:26
+
+### GitHub Actions Build Workflow Fix |TASK:TASK-2025-08-08-003|
+- **What**: Fixed GitHub Actions workflow security scan job dependency issue
+- **Why**: Build was failing because Trivy was trying to scan non-existent image during parallel execution
+- **How**: Added job dependency, conditional execution, and proper permissions for security scanning
+- **Issues**: Security scan job running in parallel with build job, attempting to scan non-existent docker.io/gemneye/hypir:latest image
+- **Result**: GitHub Actions workflow should now build successfully with proper security scanning after build completion
+
+### Problem Analysis:
+The GitHub Actions build was failing with "unable to find the specified image" error because the security-scan job was trying to scan the docker.io/gemneye/hypir:latest image before it was built and pushed by the build-and-push job.
+
+### Solution Implemented:
+1. **Job Dependency Added** ✅ - security-scan job now has `needs: build-and-push` dependency
+2. **Conditional Execution** ✅ - Added `if: github.event_name != 'pull_request'` to avoid scanning on PRs
+3. **Permissions Added** ✅ - Added `contents: read` and `security-events: write` permissions for SARIF upload
+4. **Workflow Synchronization** ✅ - Security scan now waits for build completion before attempting to scan
+
+### Files Modified:
+- **.github/workflows/docker.yml**: Added job dependency, conditional execution, and security permissions
+
+### Technical Details:
+- **Root Cause**: Security scan job was running in parallel with build job (no dependency defined)
+- **Impact**: GitHub Actions CI/CD pipeline failing on all push events
+- **Solution**: Proper job orchestration with dependencies and conditional execution
+- **Verification**: Workflow should now build and push image successfully, then scan it for vulnerabilities
+
+### Next Steps:
+1. Commit and push changes to GitHub
+2. Verify automated build process works correctly
+3. Test Docker Hub image deployment to RunPod
+
 ## 2025-08-08 05:15
 
 ### GitHub Actions Optimization and Documentation Update |TASK:TASK-2025-08-08-002|
