@@ -21,12 +21,11 @@ exclude =
     temp
 per-file-ignores =
     __init__.py:F401
-    # Ignore some specific files if needed
     predict.py:E501
 max-complexity = 10
 ignore = 
-    E203,  # Whitespace before ':'
-    E501,  # Line too long (we have max-line-length)
-    W503,  # Line break before binary operator
-    F403,  # 'from module import *' used
-    F405   # Name may be undefined, or defined from star imports
+    E203,
+    E501,
+    W503,
+    F403,
+    F405

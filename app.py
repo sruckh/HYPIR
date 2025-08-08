@@ -1,12 +1,12 @@
-import random
 import os
+import random
 from argparse import ArgumentParser
 
 import gradio as gr
 import torchvision.transforms as transforms
 from accelerate.utils import set_seed
-from omegaconf import OmegaConf
 from dotenv import load_dotenv
+from omegaconf import OmegaConf
 from PIL import Image
 
 from HYPIR.enhancer.sd2 import SD2Enhancer
@@ -147,7 +147,7 @@ with block:
             outputs=[result, status],
         )
 block.launch(
-    server_name="0.0.0.0" if not args.local else "127.0.0.1", 
+    server_name="0.0.0.0" if not args.local else "127.0.0.1",
     server_port=args.port,
     share=share_link
 )
