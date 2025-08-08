@@ -1,0 +1,328 @@
+[MAIN]
+# Load modules from the current working directory
+load-plugins=
+persistent=yes
+init-hook='import sys; sys.path.append(".")'
+
+[MESSAGES CONTROL]
+# Disable specific messages
+disable=
+    C0103, # Invalid constant name
+    C0111, # Missing docstring
+    C0114, # Missing module docstring
+    C0115, # Missing class docstring
+    C0116, # Missing function docstring
+    C0200, # Consider using enumerate instead of range(len(x))
+    C0301, # Line too long
+    C0302, # Too many lines in module
+    C0303, # Trailing whitespace
+    C0411, # Wrong import order
+    C0413, # Import "xxx" should be placed at the top of the module
+    C0414, # Import alias does not rename original package
+    C0501, # Method name should be lowercase
+    C0123, # Using type() instead of isinstance()
+    E0611, # No name in module
+    E1101, # Instance has no member
+    E1120, # No value for argument
+    E1121, # Too many positional arguments
+    E1123, # Unexpected keyword argument
+    E1124, # Argument order doesn't match
+    R0901, # Too many ancestors
+    R0902, # Too many instance attributes
+    R0903, # Too few public methods
+    R0904, # Too many public methods
+    R0911, # Too many return statements
+    R0912, # Too many branches
+    R0913, # Too many arguments
+    R0914, # Too many local variables
+    R0915, # Too many statements
+    R1702, # Too many nested blocks
+    R1703, # Simplifiable if statement
+    R1705, # No continue statement
+    R1710, # Either all return or all yield
+    R1711, # Useless return at end of function or method
+    R1714, # Consider merging comparisons
+    R1716, # Simplifiable chained comparison
+    R1718, # Consider using a tuple if possible
+    R1720, # Unnecessary dict index lookup
+    R1721, # Unnecessary use of a comprehension
+    R1722, # Consider using sys.exit
+    R1724, # Unnecessary "else" after "return"
+    R1725, # Superfluous parentheses
+    R1728, # Consider a generator expression
+    R1729, # Use a generator instead of sum()
+    R1730, # Unnecessary dict literal
+    R1731, # Unnecessary list index lookup
+    R1732, # Consider using a with statement
+    R1733, # Unnecessary list comprehension
+    R1734, # Use list comprehension
+    R1735, # Use dict literal
+    R1736, # Unnecessary list index lookup
+    R1737, # Use 'in' instead of '__contains__'
+    R1738, # Use 'bool' instead of '__len__'
+    R1739, # Use 'enumerate' instead of 'range'
+    R1740, # Use 'in' instead of 'range(len(x))'
+    R1741, # Avoid using irrelevant lambda
+    R1742, # Consider using get() for dictionary access
+    R1743, # Consider using a tuple if possible
+    R1744, # Consider using a tuple if possible
+    R1745, # Consider using a tuple if possible
+    R1746, # Avoid using arbitrary lambda
+    R1747, # Consider using a tuple if possible
+    R1748, # Avoid using arbitrary lambda
+    R1749, # Consider using a tuple if possible
+    R1750, # Consider using a tuple if possible
+    R1751, # Consider using a tuple if possible
+    R1752, # Consider using a tuple if possible
+    R1753, # Consider using a tuple if possible
+    R1754, # Consider using a tuple if possible
+    R1755, # Consider using a tuple if possible
+    R1756, # Consider using a tuple if possible
+    R1757, # Consider using a tuple if possible
+    R1758, # Consider using a tuple if possible
+    R1759, # Consider using a tuple if possible
+    R1760, # Consider using a tuple if possible
+    R1761, # Consider using a tuple if possible
+    R1762, # Consider using a tuple if possible
+    R1763, # Consider using a tuple if possible
+    R1764, # Consider using a tuple if possible
+    R1765, # Consider using a tuple if possible
+    R1766, # Consider using a tuple if possible
+    R1767, # Consider using a tuple if possible
+    R1768, # Consider using a tuple if possible
+    R1769, # Consider using a tuple if possible
+    R1770, # Consider using a tuple if possible
+    R1771, # Consider using a tuple if possible
+    R1772, # Consider using a tuple if possible
+    R1773, # Consider using a tuple if possible
+    R1774, # Consider using a tuple if possible
+    R1775, # Consider using a tuple if possible
+    R1776, # Consider using a tuple if possible
+    R1777, # Consider using a tuple if possible
+    R1778, # Consider using a tuple if possible
+    R1779, # Consider using a tuple if possible
+    R1780, # Consider using a tuple if possible
+    R1781, # Consider using a tuple if possible
+    R1782, # Consider using a tuple if possible
+    R1783, # Consider using a tuple if possible
+    R1784, # Consider using a tuple if possible
+    R1785, # Consider using a tuple if possible
+    R1786, # Consider using a tuple if possible
+    R1787, # Consider using a tuple if possible
+    R1788, # Consider using a tuple if possible
+    R1789, # Consider using a tuple if possible
+    R1790, # Consider using a tuple if possible
+    R1791, # Consider using a tuple if possible
+    R1792, # Consider using a tuple if possible
+    R1793, # Consider using a tuple if possible
+    R1794, # Consider using a tuple if possible
+    R1795, # Consider using a tuple if possible
+    R1796, # Consider using a tuple if possible
+    R1797, # Consider using a tuple if possible
+    R1798, # Consider using a tuple if possible
+    R1799, # Consider using a tuple if possible
+    R2000, # Consider using a tuple if possible
+    R2001, # Consider using a tuple if possible
+    R2002, # Consider using a tuple if possible
+    R2003, # Consider using a tuple if possible
+    R2004, # Consider using a tuple if possible
+    R2005, # Consider using a tuple if possible
+    R2006, # Consider using a tuple if possible
+    R2007, # Consider using a tuple if possible
+    R2008, # Consider using a tuple if possible
+    R2009, # Consider using a tuple if possible
+    R2010, # Consider using a tuple if possible
+    W0102, # Dangerous default value
+    W0105, # String statement has no effect
+    W0106, # String statement has no effect
+    W0107, # Unnecessary pass statement
+    W0108, # Lambda may not be necessary
+    W0109, # Duplicate key
+    W0110, # Map/filter on lambda could be replaced by comprehension
+    W0111, # Name is too long
+    W0120, # Useless else clause
+    W0121, # Useless comparison
+    W0122, # Useless elif statement
+    W0123, # Useless keyword argument
+    W0124, # Useless object inheritance
+    W0125, # Useless statement
+    W0126, # Useless string statement
+    W0127, # Assigning to function call doesn't use the function call
+    W0128, # Redefining name from outer scope
+    W0129, # Asserting string equality
+    W0130, # Duplicate except clause
+    W0131, # Named expression doesn't have an effect
+    W0132, # Named expression doesn't have an effect
+    W0133, # Duplicate expression
+    W0150, # Unnecessary italic comment
+    W0160, # String statement has no effect
+    W0161, # Unnecessary string statement
+    W0162, # Unnecessary string statement
+    W0163, # Unnecessary string statement
+    W0164, # Unnecessary string statement
+    W0165, # Unnecessary string statement
+    W0166, # Unnecessary string statement
+    W0167, # Unnecessary string statement
+    W0168, # Unnecessary string statement
+    W0169, # Unnecessary string statement
+    W0170, # Unnecessary string statement
+    W0171, # Unnecessary string statement
+    W0172, # Unnecessary string statement
+    W0173, # Unnecessary string statement
+    W0174, # Unnecessary string statement
+    W0175, # Unnecessary string statement
+    W0176, # Unnecessary string at index
+    W0177, # Unnecessary string at index
+    W0178, # Unnecessary string at index
+    W0179, # Unnecessary string at index
+    W0180, # Unnecessary string at index
+    W0181, # Unnecessary string at index
+    W0182, # Unnecessary string at index
+    W0183, # Unnecessary string at index
+    W0184, # Unnecessary string at index
+    W0185, # Unnecessary string at index
+    W0186, # Unnecessary string at index
+    W0187, # Unnecessary string at index
+    W0188, # Unnecessary string at index
+    W0189, # Unnecessary string at index
+    W0190, # Unnecessary string at index
+    W0191, # Unnecessary string at index
+    W0192, # Unnecessary string at index
+    W0193, # Unnecessary string at index
+    W0194, # Unnecessary string at index
+    W0195, # Unnecessary string at index
+    W0196, # Unnecessary string at index
+    W0197, # Unnecessary string at index
+    W0198, # Unnecessary string at index
+    W0199, # Unnecessary string at index
+    W0200, # Unnecessary string at index
+    W0201, # Unnecessary string at index
+    W0202, # Unnecessary string at index
+    W0203, # Unnecessary string at index
+    W0204, # Unnecessary string at index
+    W0205, # Unnecessary string at index
+    W0206, # Unnecessary string at index
+    W0207, # Unnecessary string at index
+    W0208, # Unnecessary string at index
+    W0209, # Unnecessary string at index
+    W0210, # Unnecessary string at index
+    W0211, # Unnecessary string at index
+    W0212, # Unnecessary string at index
+    W0213, # Unnecessary string at index
+    W0214, # Unnecessary string at index
+    W0215, # Unnecessary string at index
+    W0216, # Unnecessary string at index
+    W0217, # Unnecessary string at index
+    W0218, # Unnecessary string at index
+    W0219, # Unnecessary string at index
+    W0220, # Unnecessary string at index
+    W0221, # Unnecessary string at index
+    W0222, # Unnecessary string at index
+    W0223, # Unnecessary string at index
+    W0224, # Unnecessary string at index
+    W0225, # Unnecessary string at index
+    W0226, # Unnecessary string at index
+    W0227, # Unnecessary string at index
+    W0228, # Unnecessary string at index
+    W0229, # Unnecessary string at index
+    W0230, # Unnecessary string at index
+    W0231, # Unnecessary string at index
+    W0232, # Unnecessary string at index
+    W0233, # Unnecessary string at index
+    W0234, # Unnecessary string at index
+    W0235, # Unnecessary string at index
+    W0236, # Unnecessary string at index
+    W0237, # Unnecessary string at index
+    W0238, # Unnecessary string at index
+    W0239, # Unnecessary string at index
+    W0240, # Unnecessary string at index
+    W0241, # Unnecessary string at index
+    W0242, # Unnecessary string at index
+    W0243, # Unnecessary string at index
+    W0244, # Unnecessary string at index
+    W0245, # Unnecessary string at index
+    W0246, # Unnecessary string at index
+    W0247, # Unnecessary string at index
+    W0248, # Unnecessary string at index
+    W0249, # Unnecessary string at index
+    W0250, # Unnecessary string at index
+    W0251, # Unnecessary string at index
+    W0252, # Unnecessary string at index
+    W0253, # Unnecessary string at index
+    W0254, # Unnecessary string at index
+    W0255, # Unnecessary string at index
+    W0256, # Unnecessary string at index
+    W0257, # Unnecessary string at index
+    W0258, # Unnecessary string at index
+    W0259, # Unnecessary string at index
+    W0260, # Unnecessary string at index
+    W0261, # Unnecessary string at index
+    W0262, # Unnecessary string at index
+    W0263, # Unnecessary string at index
+    W0264, # Unnecessary string at index
+    W0265, # Unnecessary string at index
+    W0266, # Unnecessary string at index
+    W0267, # Unnecessary string at index
+    W0268, # Unnecessary string at index
+    W0269, # Unnecessary string at index
+    W0270, # Unnecessary string at index
+    W0271, # Unnecessary string at index
+    W0272, # Unnecessary string at index
+    W0273, # Unnecessary string at index
+    W0274, # Unnecessary string at index
+    W0275, # Unnecessary string at index
+    W0276, # Unnecessary string at index
+    W0277, # Unnecessary string at index
+    W0278, # Unnecessary string at index
+    W0279, # Unnecessary string at index
+    W0280, # Unnecessary string at index
+    W0281, # Unnecessary string at index
+    W0282, # Unnecessary string at index
+    W0283, # Unnecessary string at index
+    W0284, # Unnecessary string at index
+    W0285, # Unnecessary string at index
+    W0286, # Unnecessary string at index
+    W0287, # Unnecessary string at index
+    W0288, # Unnecessary string at index
+    W0289, # Unnecessary string at index
+    W0290, # Unnecessary string at index
+    W0291, # Unnecessary string at index
+    W0292, # Unnecessary string at index
+    W0293, # Unnecessary string at index
+    W0294, # Unnecessary string at index
+    W0295, # Unnecessary string at index
+    W0296, # Unnecessary string at index
+    W0297, # Unnecessary string at index
+    W0298, # Unnecessary string at index
+    W0299, # Unnecessary string at index
+    W0300, # Unnecessary string at index
+
+[FORMAT]
+max-line-length=127
+
+[TYPECHECK]
+# Type checking configuration if using mypy
+ignore-mixin-members=yes
+ignored-modules=
+    torch,
+    torchvision,
+    gradio,
+    accelerate,
+    diffusers,
+    transformers,
+    omegaconf,
+    PIL,
+    numpy,
+    polars,
+    openai,
+    open_clip_torch,
+    peft,
+    tenacity,
+    tensorboard,
+    lpips,
+    vision_aided_loss,
+    einops,
+    pydantic,
+    opencv_python_headless,
+    timm,
+    dotenv

@@ -19,7 +19,7 @@ __pycache__
 # Exclude Python virtual environment
 /venv
 
-/configs
+# Exclude development and test directories
 /exps
 /runs
 /data
@@ -29,3 +29,49 @@ __pycache__
 /.env
 *.log
 /output.png
+
+# Exclude documentation and examples
+examples/
+assets/gallery_sd2/
+
+# Exclude model files and outputs
+results/
+outputs/
+models/
+*.pth
+*.ckpt
+*.bin
+*.pt
+
+# Exclude development files
+tests/
+*.test.py
+test.py
+*_test.py
+docs/
+
+# Exclude Claude and other AI/ML development directories
+.claude/
+.claude-flow/
+.roo/
+.serena/
+memory/
+PLAYBOOKS/
+coordination/
+.serenabackup/
+
+# Exclude temporary data directories
+workspace/
+
+# Exclude additional generated files
+*.tmp
+*.tar.gz
+*.zip
+.pytest_cache
+.coverage
+htmlcov/
+.tox/
+
+# Exclude OS files
+.DS_Store
+Thumbs.db

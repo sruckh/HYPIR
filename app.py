@@ -25,6 +25,9 @@ parser.add_argument("--max_size", type=str, default=None, help="Comma-seperated 
 parser.add_argument("--device", type=str, default="cuda")
 args = parser.parse_args()
 
+# Support share link via environment variable
+share_link = os.getenv("GRADIO_SHARE_LINK", "false").lower() == "true"
+
 max_size = args.max_size
 if max_size is not None:
     max_size = tuple(int(x) for x in max_size.split(","))
@@ -143,4 +146,8 @@ with block:
             inputs=[image, prompt, upscale, patch_size, stride, seed],
             outputs=[result, status],
         )
-block.launch(server_name="0.0.0.0" if not args.local else "127.0.0.1", server_port=args.port)
+block.launch(
+    server_name="0.0.0.0" if not args.local else "127.0.0.1", 
+    server_port=args.port,
+    share=share_link
+)
