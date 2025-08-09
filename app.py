@@ -203,8 +203,6 @@ def process(
 
 def health_check():
     """Health check endpoint for container orchestration."""
-    global model, model_loading_error
-    
     if model is not None:
         return {"status": "healthy", "model_loaded": True, "message": "Model ready for inference"}
     elif model_loading_error is not None:
