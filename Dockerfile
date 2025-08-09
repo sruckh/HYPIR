@@ -37,7 +37,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY . .
 
 # Set permissions
-RUN chmod +x app.py train.py test.py predict.py
+RUN find . -name "*.py" -maxdepth 1 -exec chmod +x {} \;
 
 # Create directories for outputs and models
 RUN mkdir -p /workspace/HYPIR/models /workspace/HYPIR/outputs /workspace/HYPIR/temp

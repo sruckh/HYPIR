@@ -7,33 +7,34 @@
 **Progress**: 4/4 tasks completed
 
 ## Current Task
-**Task ID**: TASK-2025-08-08-004
-**Title**: Fix GitHub Actions Lint Configuration and Import Sorting
+**Task ID**: TASK-2025-08-08-005
+**Title**: Fix Docker Build Error - test.py Exclusion Issue
 **Status**: COMPLETE
 **Started**: 2025-08-08
-**Dependencies**: TASK-2025-08-08-003
+**Dependencies**: TASK-2025-08-08-004
 
 ### Task Context
 <!-- Critical information needed to resume this task -->
-- **Previous Work**: GitHub Actions build failing due to flake8 configuration errors and import sorting issues
-- **Key Files**: .flake8 (lines 22-31), app.py (lines 1-13)
-- **Environment**: GitHub CI/CD pipeline lint-code job failing with "Error code '#'" error
-- **Next Steps**: Update TASKS.md and JOURNAL.md, create memory, commit and push the lint fixes
+- **Previous Work**: Docker build failing with "chmod: cannot access 'test.py': No such file or directory"
+- **Key Files**: .dockerignore (line 49), Dockerfile (line 40)
+- **Environment**: Docker build process failing due to .dockerignore excluding test.py but Dockerfile trying to chmod it
+- **Next Steps**: Update TASKS.md and JOURNAL.md with completion, create memory, commit changes
 
 ### Findings & Decisions
-- **FINDING-001**: flake8 configuration had inline comments in ignore section being interpreted as error codes
-- **DECISION-001**: Removed all inline comments from .flake8 ignore section to fix configuration parsing
-- **DECISION-002**: Fixed import sorting in app.py - alphabetized imports within groups (stdlib, third-party, local)
-- **FINDING-002**: Additional 84 linting issues identified throughout codebase requiring future cleanup
-- **BLOCKER-001**: GitHub Actions lint-code job failing with "Error code '#' supplied to 'ignore' option" → RESOLVED
+- **FINDING-001**: .dockerignore was excluding test.py on line 49, preventing it from being copied to build context
+- **DECISION-001**: Removed test.py from .dockerignore exclusions while keeping other test patterns
+- **DECISION-002**: Changed Dockerfile chmod to use dynamic file discovery: `find . -name "*.py" -maxdepth 1 -exec chmod +x {} \;`
+- **FINDING-002**: Docker build approach is more robust and handles missing files gracefully
+- **BLOCKER-001**: Docker chmod failing for missing test.py → RESOLVED
 
 ### Task Chain
 1. ✅ Containerization Complete (TASK-2025-08-08-001) (COMPLETE)
 2. ✅ Update Documentation & Commit Changes (TASK-2025-08-08-002) (COMPLETE)
 3. ✅ Fix GitHub Actions Build Workflow (TASK-2025-08-08-003) (COMPLETE)
 4. ✅ Fix GitHub Actions Lint Configuration and Import Sorting (TASK-2025-08-08-004) (COMPLETE)
-5. ⏳ GitHub Integration Verification
-6. ⏳ RunPod Deployment Validation
+5. ✅ Fix Docker Build Error - test.py Exclusion Issue (TASK-2025-08-08-005) (COMPLETE)
+6. ⏳ GitHub Integration Verification
+7. ⏳ RunPod Deployment Validation
 **Started**: 2025-08-08
 **Dependencies**: TASK-2025-08-08-001
 
@@ -67,6 +68,7 @@
 - [TASK-2025-08-08-002]: Update Documentation and Commit Changes to GitHub → See JOURNAL.md 2025-08-08
 - [TASK-2025-08-08-003]: Fix GitHub Actions Build Workflow → See JOURNAL.md 2025-08-08
 - [TASK-2025-08-08-004]: Fix GitHub Actions Lint Configuration and Import Sorting → See JOURNAL.md 2025-08-08
+- [TASK-2025-08-08-005]: Fix Docker Build Error - test.py Exclusion Issue → See JOURNAL.md 2025-08-08
 - [Older tasks in TASKS_ARCHIVE/]
 
 ---

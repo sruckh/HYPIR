@@ -46,7 +46,6 @@ models/
 # Exclude development files
 tests/
 *.test.py
-test.py
 *_test.py
 docs/
 
