@@ -30,9 +30,9 @@ __pycache__
 *.log
 /output.png
 
-# Exclude documentation and examples
-examples/
-assets/gallery_sd2/
+# Exclude documentation but keep needed examples and assets
+# examples/ (commented out - needed for runtime)
+# assets/ (commented out - needed for runtime)
 
 # Exclude model files and outputs
 results/
@@ -48,6 +48,17 @@ tests/
 *.test.py
 *_test.py
 docs/
+*.md
+README.md
+CHANGELOG.md
+LICENSE
+CONTRIBUTING.md
+
+# Exclude build artifacts
+build/
+dist/
+*.egg-info/
+node_modules/
 
 # Exclude Claude and other AI/ML development directories
 .claude/

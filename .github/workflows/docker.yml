@@ -58,8 +58,9 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        target: runtime
         build-args: |
-          PIP_EXTRA_OPTS="--timeout 300"
+          BUILDKIT_INLINE_CACHE=1
 
     - name: Test image
       if: github.event_name != 'pull_request'

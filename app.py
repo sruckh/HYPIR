@@ -3,6 +3,7 @@ import random
 from argparse import ArgumentParser
 
 import gradio as gr
+import torch
 import torchvision.transforms as transforms
 from accelerate.utils import set_seed
 from dotenv import load_dotenv
@@ -11,6 +12,14 @@ from PIL import Image
 
 from HYPIR.enhancer.sd2 import SD2Enhancer
 from HYPIR.utils.captioner import GPTCaptioner
+
+# GPU Memory Optimization for RunPod
+if torch.cuda.is_available():
+    torch.backends.cudnn.benchmark = True  # Optimize for fixed input sizes
+    torch.backends.cudnn.deterministic = False  # Allow non-deterministic for speed
+    torch.set_float32_matmul_precision('medium')  # Use mixed precision
+    # Enable memory efficient attention
+    torch.backends.cuda.enable_flash_sdp(True)
 
 
 load_dotenv()
@@ -60,28 +69,64 @@ if os.getenv("MODEL_PATH"):
     config.weight_path = os.getenv("MODEL_PATH")
     print(f"Using MODEL_PATH from environment: {config.weight_path}")
 
-# Validate model path
-if config.weight_path == "TODO" or not config.weight_path:
-    raise ValueError(
-        "Model weight path is not set. Please provide a valid model path in the config file "
-        "or set the MODEL_PATH environment variable."
-    )
-if not os.path.exists(config.weight_path):
-    raise FileNotFoundError(f"Model weights not found at path: {config.weight_path}")
+# Global model variable for lazy loading
+model = None
+model_loading_error = None
 
-if config.base_model_type == "sd2":
-    model = SD2Enhancer(
-        base_model_path=config.base_model_path,
-        weight_path=config.weight_path,
-        lora_modules=config.lora_modules,
-        lora_rank=config.lora_rank,
-        model_t=config.model_t,
-        coeff_t=config.coeff_t,
-        device=args.device,
-    )
-    model.init_models()
-else:
-    raise ValueError(config.base_model_type)
+def initialize_model():
+    """Initialize the model lazily on first inference call."""
+    global model, model_loading_error
+    
+    if model is not None:
+        return model
+    
+    if model_loading_error is not None:
+        raise model_loading_error
+    
+    try:
+        # Check if model path needs to be downloaded or is available
+        weight_path = config.weight_path
+        
+        # Handle case where weight_path is not set or is placeholder
+        if weight_path == "TODO" or not weight_path:
+            # Try to get from environment variable
+            weight_path = os.getenv("MODEL_PATH")
+            if not weight_path:
+                raise ValueError(
+                    "Model weight path is not set. Please provide a valid model path in the config file "
+                    "or set the MODEL_PATH environment variable. For RunPod deployment, models can be "
+                    "placed in /workspace/HYPIR/models/ or use Hugging Face model names."
+                )
+            config.weight_path = weight_path
+        
+        # Check if path exists locally, if not assume it's a Hugging Face model
+        if not os.path.exists(weight_path) and not weight_path.startswith(('http', 'hf:', 'huggingface')):
+            print(f"Warning: Model weights not found at local path: {weight_path}")
+            print("Assuming this is a Hugging Face model identifier or will be downloaded...")
+        
+        print(f"Initializing SD2Enhancer with model: {weight_path}")
+        
+        if config.base_model_type == "sd2":
+            model = SD2Enhancer(
+                base_model_path=config.base_model_path,
+                weight_path=weight_path,
+                lora_modules=config.lora_modules,
+                lora_rank=config.lora_rank,
+                model_t=config.model_t,
+                coeff_t=config.coeff_t,
+                device=args.device,
+            )
+            print("Loading model weights... This may take a few minutes on first run.")
+            model.init_models()
+            print("Model loaded successfully!")
+            return model
+        else:
+            raise ValueError(f"Unsupported model type: {config.base_model_type}")
+            
+    except Exception as e:
+        model_loading_error = e
+        print(f"Error loading model: {str(e)}")
+        raise e
 
 
 def process(
@@ -93,6 +138,12 @@ def process(
     seed,
     progress=gr.Progress(track_tqdm=True),
 ):
+    # Initialize model on first inference call
+    try:
+        current_model = initialize_model()
+    except Exception as e:
+        return error_image, f"Failed to load model: {str(e)}"
+    
     # Input validation for security
     if image is None:
         return error_image, "Failed: No image provided"
@@ -136,7 +187,7 @@ def process(
 
     image_tensor = to_tensor(image).unsqueeze(0)
     try:
-        pil_image = model.enhance(
+        pil_image = current_model.enhance(
             lq=image_tensor,
             prompt=prompt,
             upscale=upscale,
@@ -148,6 +199,18 @@ def process(
         return error_image, f"Failed: {e} :("
 
     return pil_image, f"Success! :)\nUsed prompt: {prompt}"
+
+
+def health_check():
+    """Health check endpoint for container orchestration."""
+    global model, model_loading_error
+    
+    if model is not None:
+        return {"status": "healthy", "model_loaded": True, "message": "Model ready for inference"}
+    elif model_loading_error is not None:
+        return {"status": "unhealthy", "model_loaded": False, "message": f"Model loading error: {str(model_loading_error)}"}
+    else:
+        return {"status": "starting", "model_loaded": False, "message": "Model not yet loaded, will load on first inference"}
 
 
 MARKDOWN = """
