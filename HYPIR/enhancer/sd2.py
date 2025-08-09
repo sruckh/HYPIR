@@ -26,7 +26,7 @@ class SD2Enhancer(BaseEnhancer):
         self.G.add_adapter(G_lora_cfg)
 
         print(f"Load model weights from {self.weight_path}")
-        state_dict = torch.load(self.weight_path, map_location="cpu", weights_only=False)
+        state_dict = torch.load(self.weight_path, map_location="cpu", weights_only=True)
         self.G.load_state_dict(state_dict, strict=False)
         input_keys = set(state_dict.keys())
         required_keys = set([k for k in self.G.state_dict().keys() if "lora" in k])

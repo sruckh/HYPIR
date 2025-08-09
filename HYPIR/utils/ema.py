@@ -21,7 +21,7 @@ class EMAModel:
             if ema_resume_pth:
                 if verbose:
                     print(f"Loading EMA Parameters from {ema_resume_pth}")
-                ema_ckpt = torch.load(ema_resume_pth, map_location="cpu")
+                ema_ckpt = torch.load(ema_resume_pth, map_location="cpu", weights_only=True)
                 for name, param in self.ema_state_dict.items():
                     if name in ema_ckpt:
                         _param = ema_ckpt[name].to(param.dtype).to(param.device)

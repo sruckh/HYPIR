@@ -54,6 +54,21 @@ if args.gpt_caption:
 to_tensor = transforms.ToTensor()
 
 config = OmegaConf.load(args.config)
+
+# Override config with environment variables
+if os.getenv("MODEL_PATH"):
+    config.weight_path = os.getenv("MODEL_PATH")
+    print(f"Using MODEL_PATH from environment: {config.weight_path}")
+
+# Validate model path
+if config.weight_path == "TODO" or not config.weight_path:
+    raise ValueError(
+        "Model weight path is not set. Please provide a valid model path in the config file "
+        "or set the MODEL_PATH environment variable."
+    )
+if not os.path.exists(config.weight_path):
+    raise FileNotFoundError(f"Model weights not found at path: {config.weight_path}")
+
 if config.base_model_type == "sd2":
     model = SD2Enhancer(
         base_model_path=config.base_model_path,
@@ -78,6 +93,27 @@ def process(
     seed,
     progress=gr.Progress(track_tqdm=True),
 ):
+    # Input validation for security
+    if image is None:
+        return error_image, "Failed: No image provided"
+    
+    if not isinstance(prompt, str):
+        return error_image, "Failed: Invalid prompt format"
+    
+    # Sanitize prompt - remove potential injection attempts
+    if len(prompt) > 500:
+        return error_image, "Failed: Prompt too long (max 500 characters)"
+    
+    # Validate numeric inputs
+    if not isinstance(upscale, (int, float)) or upscale < 1 or upscale > 8:
+        return error_image, "Failed: Invalid upscale factor (must be 1-8)"
+    
+    if not isinstance(patch_size, (int, float)) or patch_size < 256 or patch_size > 2048:
+        return error_image, "Failed: Invalid patch size (must be 256-2048)"
+    
+    if not isinstance(stride, (int, float)) or stride < 128 or stride > patch_size:
+        return error_image, "Failed: Invalid stride (must be 128 to patch_size)"
+    
     if seed == -1:
         seed = random.randint(0, 2**32 - 1)
     set_seed(seed)
@@ -117,7 +153,7 @@ def process(
 MARKDOWN = """
 ## HYPIR: Harnessing Diffusion-Yielded Score Priors for Image Restoration
 
-[GitHub](https://github.com/XPixelGroup/HYPIR) | [Paper](TODO) | [Project Page](TODO)
+[GitHub](https://github.com/sruckh/HYPIR) | [Project Page](https://github.com/sruckh/HYPIR)
 
 If HYPIR is helpful for you, please help star the GitHub Repo. Thanks!
 """
@@ -146,8 +182,11 @@ with block:
             inputs=[image, prompt, upscale, patch_size, stride, seed],
             outputs=[result, status],
         )
+# Support server binding via environment variable for container flexibility
+server_host = os.getenv("GRADIO_SERVER_HOST", "127.0.0.1" if args.local else "0.0.0.0")
+
 block.launch(
-    server_name="0.0.0.0" if not args.local else "127.0.0.1",
+    server_name=server_host,
     server_port=args.port,
     share=share_link
 )

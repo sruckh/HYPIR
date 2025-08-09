@@ -73,7 +73,7 @@ class SD2Trainer(BaseTrainer):
         def load_model_hook(models, input_dir):
             model = models.pop(0)
             assert isinstance(model, UNet2DConditionModel)
-            state_dict = torch.load(os.path.join(input_dir, "state_dict.pth"))
+            state_dict = torch.load(os.path.join(input_dir, "state_dict.pth"), weights_only=True)
             m, u = model.load_state_dict(state_dict, strict=False)
             logger.info(f"Loading lora parameters, unexpected keys: {u}")
 

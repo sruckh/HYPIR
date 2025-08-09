@@ -39,8 +39,17 @@ COPY . .
 # Set permissions
 RUN find . -name "*.py" -maxdepth 1 -exec chmod +x {} \;
 
+# Create non-root user for security
+RUN groupadd -r hypir && useradd -r -g hypir -u 1000 hypir
+
 # Create directories for outputs and models
 RUN mkdir -p /workspace/HYPIR/models /workspace/HYPIR/outputs /workspace/HYPIR/temp
+
+# Change ownership to hypir user
+RUN chown -R hypir:hypir /workspace/HYPIR
+
+# Switch to non-root user
+USER hypir
 
 # Expose port 7860 for Gradio
 EXPOSE 7860

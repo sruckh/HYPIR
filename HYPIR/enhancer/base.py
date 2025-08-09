@@ -120,6 +120,10 @@ class BaseEnhancer:
             dtype=self.weight_dtype,
         ):
             z_lq = self.vae.encode(lq.to(self.weight_dtype)).latent_dist.sample()
+        
+        # Clean up lq tensor to free GPU memory after VAE encoding
+        del lq
+        torch.cuda.empty_cache()
 
         # Generator forward
         self.prepare_inputs(batch_size=bs, prompt=prompt)
@@ -130,6 +134,11 @@ class BaseEnhancer:
             progress=True,
             desc="Generator Forward",
         )(z_lq)
+        
+        # Clean up z_lq tensor after generator processing
+        del z_lq
+        torch.cuda.empty_cache()
+        
         with enable_tiled_vae(
             self.vae,
             is_decoder=True,
@@ -137,6 +146,10 @@ class BaseEnhancer:
             dtype=self.weight_dtype,
         ):
             x = self.vae.decode(z.to(self.weight_dtype)).sample.float()
+        
+        # Clean up z tensor after VAE decoding
+        del z
+        torch.cuda.empty_cache()
         x = x[..., :h1, :w1]
         x = (x + 1) / 2
         x = F.interpolate(input=x, size=(h0, w0), mode="bicubic", antialias=True)
