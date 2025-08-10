@@ -62,6 +62,9 @@ fi
 # Set Hugging Face home directory
 export HF_HOME=/workspace/HYPIR/models
 
+# Force Python output to be unbuffered
+export PYTHONUNBUFFERED=1
+
 # Launch the Gradio app
 echo "Launching Gradio app..."
 python app.py --config configs/sd2_gradio.yaml --device cuda --gpt_caption
