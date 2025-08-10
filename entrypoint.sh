@@ -1,5 +1,24 @@
 #!/bin/bash
 
+# =================================================================
+# Log System Information
+# =================================================================
+echo "--- System Information ---"
+echo "Python version:"
+python --version
+echo ""
+echo "CUDA version:"
+nvcc --version
+echo ""
+echo "PyTorch version:"
+python -c "import torch; print(torch.__version__)"
+echo ""
+echo "NVIDIA driver and GPU information:"
+nvidia-smi
+echo "--------------------------"
+echo ""
+
+
 # Ensure we are in the workspace directory
 mkdir -p /workspace
 cd /workspace
@@ -16,8 +35,13 @@ cd /workspace/HYPIR
 if [ ! -f "/workspace/HYPIR/models/sd2/HYPIR_sd2.pth" ]; then
   echo "Performing first-time setup..."
 
-  # Install Python requirements
-  pip install -r requirements.txt
+  # Install a specific, stable version of accelerate to fix numpy incompatibility
+  echo "Installing accelerate library version 1.5.2..."
+  pip install accelerate==1.5.2
+
+  # Install other Python requirements, excluding torch, torchvision, and accelerate
+  echo "Installing remaining Python requirements..."
+  grep -v -e '^torch==' -e '^torchvision==' -e '^accelerate==' requirements.txt | xargs pip install
 
   # Create model directory
   mkdir -p /workspace/HYPIR/models/sd2
